@@ -68,7 +68,8 @@ along with resources. For simplification, I created two shell scripts
 - Fo to root directory of project.
 - First chmod the shell scripts
 ```shell  
-chmod 755 *```  
+chmod 755 *
+```  
   
 #### To deploy the application  
 ```shell  
