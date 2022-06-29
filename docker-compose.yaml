@@ -1,0 +1,25 @@
+version: "3"
+services:
+  postgres:
+    build: ./postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=atm_service
+
+  atm-service:
+    image: atm-service-v1
+    ports:
+      - "9011:9011"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/atm_service?useSSL=false
+      SPRING_DATASOURCE_USERNAME: "postgres"
+      SPRING_DATASOURCE_PASSWORD: "postgres"
+    build:
+      context: .
+      dockerfile: "Dockerfile"
+    depends_on:
+      - postgres
