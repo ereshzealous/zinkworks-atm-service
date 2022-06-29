@@ -27,7 +27,7 @@ public class NotesService {
 
   public List<Notes> verifyATMForNotes(Double amount) {
     List<Notes> notes = getAllNotesInATM();
-    Double totalAmount = notes.stream().mapToDouble(v -> v.getNote() * v.getCount()).sum();
+    double totalAmount = notes.stream().mapToDouble(v -> v.getNote() * v.getCount()).sum();
     if (totalAmount < amount) {
       throw new DataValidationException(IErrorMessages.REQUESTED_AMOUNT_IS_NOT_AVAILABLE_IN_ATM, IErrorStatus.DATA_VALIDATION);
     }
@@ -36,12 +36,19 @@ public class NotesService {
 
   public List<NoteDenomination> generateNotesDenomination(Double amount, List<Notes> notes) {
     List<NoteDenomination> noteDenominations = notes.stream().map(data -> new NoteDenomination(data.getNote(), NumberUtils.INTEGER_ZERO)).collect(Collectors.toList());
-    Double amountAvailable = notes.stream().mapToDouble(v -> v.getNote() * v.getCount()).sum();
+    double amountAvailable = notes.stream().mapToDouble(v -> v.getNote() * v.getCount()).sum();
     Double amountToDispense = amount;
     if (amountAvailable >= amountToDispense) {
       for (int i = 0; i < notes.size(); i++) {
-        if (amount >= notes.get(i).getNote()) {
-          noteDenominations.get(i).setCount((int) (amount / notes.get(i).getNote()));
+        Integer exactCountOfNote = notes.get(i).getCount();
+        if (amount >= notes.get(i).getNote() && exactCountOfNote != 0) {
+          int count = (int) (amount / notes.get(i).getNote());
+          int difference = notes.get(i).getCount() - count;
+          if (difference >= 0) {
+            noteDenominations.get(i).setCount(count);
+          } else {
+            noteDenominations.get(i).setCount(exactCountOfNote);
+          }
           amount = amount - noteDenominations.get(i).getCount() * notes.get(i).getNote();
         }
       }
