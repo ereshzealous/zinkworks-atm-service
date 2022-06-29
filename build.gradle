@@ -57,5 +57,17 @@ jacocoTestReport {
 
 jacoco {
     toolVersion = "0.8.5"
-    reportsDir = file("$buildDir/jacoco")
+    reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.9
+            }
+        }
+    }
 }
