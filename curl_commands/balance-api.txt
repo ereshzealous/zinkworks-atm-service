@@ -1,0 +1,1 @@
+curl --location --request GET 'http://localhost:9011/api/balance?pin=987654321&account-number=4321'

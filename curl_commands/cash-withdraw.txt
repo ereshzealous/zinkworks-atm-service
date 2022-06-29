@@ -1,0 +1,7 @@
+curl --location --request POST 'http://localhost:9011/api/cash/withdraw' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "accountNumber" : "987654321",
+    "pin" : 4321,
+    "amount" : 10
+}'
